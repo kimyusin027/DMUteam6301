@@ -1,4 +1,4 @@
-<h1>Test Map</h1>
+<h1>Patch Note</h1>
 
 <div>2025-05-20<br>
 // 캐릭터 움직임 개선 <br>
