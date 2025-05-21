@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2000213417437082925}
   - component: {fileID: 5259824939330259412}
   - component: {fileID: 2153663266441344716}
+  - component: {fileID: 845542344924290221}
   m_Layer: 0
   m_Name: Catwalk Pillar Rails
   m_TagString: Floor
@@ -109,3 +110,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5a4645c9d2fbfc64a8e636733c22e176, type: 3}
+--- !u!65 &845542344924290221
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819337804145458440}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.001005, y: 1, z: 0.1992953}
+  m_Center: {x: 1.0001036, y: 5, z: -0.0142932385}
