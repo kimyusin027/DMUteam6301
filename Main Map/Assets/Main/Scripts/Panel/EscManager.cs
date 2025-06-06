@@ -4,11 +4,14 @@ public class EscManager : MonoBehaviour
 {
     public GameObject Player;
     public GameObject CancelPanel;
+    public GameObject BasicPanel;
     bool activeCancel = false;
+    bool activeCancel2 = true;
 
     private void Start()
     {
         CancelPanel.SetActive(activeCancel);
+        BasicPanel.SetActive(activeCancel2);
     }
 
     private void Update()
@@ -16,7 +19,9 @@ public class EscManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             activeCancel = !activeCancel;
+            activeCancel2 = !activeCancel2;
             CancelPanel.SetActive(activeCancel);
+            BasicPanel.SetActive(activeCancel2);
         }
     }
 
@@ -28,6 +33,7 @@ public class EscManager : MonoBehaviour
         PlayerPrefs.Save();
 
         CancelPanel.SetActive(false);
+
     }
 
     public void GameLoad()
@@ -41,6 +47,7 @@ public class EscManager : MonoBehaviour
         Player.transform.position = new Vector3(x, y, z);
 
         CancelPanel.SetActive(false);
+
     }
 
     public void GameExit()
