@@ -125,6 +125,14 @@ namespace NavKeypad
             onAccessGranted?.Invoke();
             panelMesh.material.SetVector("_EmissionColor", screenGrantedColor * screenIntensity);
             audioSource.PlayOneShot(accessGrantedSfx);
+
+            // 추가된 부분: 태그가 "LiftObject"인 모든 오브젝트를 위로 100만큼 이동
+            GameObject[] objectsToLift = GameObject.FindGameObjectsWithTag("LiftObject");
+            foreach (GameObject obj in objectsToLift)
+            {
+                Vector3 newPosition = obj.transform.position + new Vector3(0, 3f, 0);
+                obj.transform.position = newPosition;
+            }
         }
 
     }

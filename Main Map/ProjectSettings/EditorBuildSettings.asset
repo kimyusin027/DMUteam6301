@@ -8,11 +8,14 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Sat Productions/E-01/Auto Build Versioning Tool/Scenes/Demo Scene.unity
     guid: fe85e24d5dd0e7b4ebbe296ee7a3905b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test.unity
     guid: 1b0c648a97d37234784e34de258e33a4
+  - enabled: 1
+    path: Assets/Scenes/Game0608.unity
+    guid: e5a003678a0814b47bcaeb4aa2d0b1f5
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

@@ -1,6 +1,4 @@
-using NUnit.Framework.Interfaces;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 [RequireComponent(typeof(CharacterController))]
 public class SimpleCharacterController : MonoBehaviour
@@ -9,7 +7,11 @@ public class SimpleCharacterController : MonoBehaviour
     public float gravity = -20f;
     public float jumpHeight = 2f;
     public float jumpForce = 9f;
-    public float interactDistance = 1.5f;
+
+    public Camera playerCamera;
+    public float zoomSpeed = 10f;
+    public float minFOV = 30f;
+    public float maxFOV = 90f;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -31,7 +33,7 @@ public class SimpleCharacterController : MonoBehaviour
 
         Move();
         Jump();
-
+        ZoomCamera();
 
         Vector3 vertical = Vector3.up * velocity.y;
 
@@ -54,7 +56,7 @@ public class SimpleCharacterController : MonoBehaviour
         if (isGrounded)
             isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        float currentSpeed = isRunning ? moveSpeed * 1.25f : moveSpeed;
+        float currentSpeed = isRunning ? moveSpeed * 1.3f : moveSpeed;
 
         Vector3 horizontal = move * currentSpeed;
 
@@ -66,6 +68,17 @@ public class SimpleCharacterController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
+    void ZoomCamera()
+    {
+        if (playerCamera == null) return;
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scroll) > 0.01f)
+        {
+            playerCamera.fieldOfView -= scroll * zoomSpeed;
+            playerCamera.fieldOfView = Mathf.Clamp(playerCamera.fieldOfView, minFOV, maxFOV);
         }
     }
 
