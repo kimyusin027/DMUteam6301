@@ -31,7 +31,6 @@ public class SimpleCharacterController : MonoBehaviour
 
         Move();
         Jump();
-        Interact();
 
 
         Vector3 vertical = Vector3.up * velocity.y;
@@ -67,33 +66,6 @@ public class SimpleCharacterController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-    }
-
-    void Interact()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            TryDoor();
-        }
-    }
-
-    void TryDoor()
-    {
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactDistance))
-        {
-            if (hit.collider.CompareTag("Door"))
-            {
-                // 문과 연결된 텔레포트 위치 가져오기
-                Door door = hit.collider.GetComponent<Door>();
-                if (door != null && door.tpTarget != null)
-                {
-                    transform.position = door.tpTarget.position;
-                }
-            }
         }
     }
 
