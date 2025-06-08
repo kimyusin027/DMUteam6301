@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "880235418055",
+    "project_id": "deus-ex-machina-1f364",
+    "storage_bucket": "deus-ex-machina-1f364.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880235418055:android:8a2a62f76eb985217989e2",
+        "android_client_info": {
+          "package_name": "com.UnityTechnologies.com.unity.template.urpblank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880235418055-8gpmd2pf7hkog2mevge1qn9e7bbjp60f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzZhL8iosbiKRGtUD09lc4se-m9CWytmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880235418055-8gpmd2pf7hkog2mevge1qn9e7bbjp60f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
