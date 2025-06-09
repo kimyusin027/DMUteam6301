@@ -1,4 +1,4 @@
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -99,12 +99,12 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("Initializing game coroutine started");
 
-        // ��� ���
+        // 잠시 대기
         yield return new WaitForSeconds(2f);
 
         Debug.Log($"Connected clients count: {NetworkManager.Singleton.ConnectedClients.Count}");
 
-        // ���� ����
+        // 게임 시작
         StartGame();
     }
 
@@ -180,7 +180,7 @@ public class GameManager : NetworkBehaviour
         Debug.Log($"Client disconnected: {clientId}");
         UpdateConnectedPlayersCount();
 
-        // ȣ��Ʈ�� ������ ������ �� ó��
+        // 호스트가 연결을 끊었을 때 처리
         if (clientId == 0 && IsClient && !IsServer)
         {
             HandleHostDisconnection();
@@ -314,5 +314,35 @@ public class GameManager : NetworkBehaviour
     public int GetConnectedPlayersCount()
     {
         return NetworkManager.Singleton?.ConnectedClients?.Count ?? 0;
+    }
+
+    // ✅ Server에서 호출하는 안전한 중간 메서드
+    public void BroadcastEnemyInfoToClients(string json, bool isDetailed)
+    {
+        if (IsServer)
+        {
+            SendEnemyInfoToClientRpc(json, isDetailed);
+        }
+    }
+
+    // ✅ ClientRpc는 내부 분기 없이 클라이언트에서만 실행되도록 작성
+    [ClientRpc]
+    public void SendEnemyInfoToClientRpc(string json, bool isDetailed)
+    {
+        EnemyInfo info = JsonUtility.FromJson<EnemyInfo>(json);
+        string display = EnemyInfoProvider.Instance.FormatInfoText(info, isDetailed);
+
+        Debug.Log("[적 정보 수신]\n" + display);
+
+        Player2UIController ui = FindObjectOfType<Player2UIController>();
+        if (ui != null)
+        {
+            ui.SetMissionText(display);
+            ui.ShowCooperationAlert("적 정보 수신 완료");
+        }
+        else
+        {
+            Debug.LogWarning("Player2UIController가 씬에 존재하지 않습니다.");
+        }
     }
 }

@@ -43,6 +43,8 @@ namespace NavKeypad
         private bool displayingResult = false;
         private bool accessWasGranted = false;
 
+        public GameObject LiftObject;
+
         private void Awake()
         {
             ClearInput();
@@ -126,12 +128,13 @@ namespace NavKeypad
             panelMesh.material.SetVector("_EmissionColor", screenGrantedColor * screenIntensity);
             audioSource.PlayOneShot(accessGrantedSfx);
 
-            // 추가된 부분: 태그가 "LiftObject"인 모든 오브젝트를 위로 100만큼 이동
-            GameObject[] objectsToLift = GameObject.FindGameObjectsWithTag("LiftObject");
-            foreach (GameObject obj in objectsToLift)
+            if (LiftObject != null && LiftObject.CompareTag("LiftObject"))
             {
-                Vector3 newPosition = obj.transform.position + new Vector3(0, 3f, 0);
-                obj.transform.position = newPosition;
+                LiftObject.transform.position = new Vector3(0, 3.5f, 0);
+            }
+            if (LiftObject != null && LiftObject.CompareTag("chest"))
+            {
+                LiftObject.transform.rotation = Quaternion.Euler(0, -110f, 0);
             }
         }
 

@@ -5,8 +5,7 @@ using UnityEngine.InputSystem.XR;
 public class Interact : MonoBehaviour
 {
     public string targetTag = "Interactable"; // 상호작용할 대상 태그
-    public float interactRange = 1.5f; // 상호작용 거리
-    public LayerMask interactLayer; // 상호작용할 레이어
+    public float interactRange = 2f; // 상호작용 거리
 
     private Camera Cam;
     private CharacterController controller;
@@ -24,7 +23,7 @@ public class Interact : MonoBehaviour
             Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, interactRange, interactLayer))
+            if (Physics.Raycast(ray, out hit, interactRange))
             {
                 if (hit.collider.CompareTag(targetTag))
                 {
@@ -49,6 +48,16 @@ public class Interact : MonoBehaviour
             controller.enabled = true;
 
             Debug.Log("이동 성공!");
+        }
+        else if (target.name == "eggpaper")
+        {
+            Debug.Log("회고록: " + target.name);
+            target.SetActive(false);
+        }
+        else if (target.name == "sideroompaper")
+        {
+            Debug.Log("탈출 전 종이: " + target.name);
+            target.SetActive(false);
         }
     }
 

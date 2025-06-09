@@ -6,7 +6,10 @@ public class SimpleCharacterController : MonoBehaviour
     public float moveSpeed = 5f;
     public float gravity = -20f;
     public float jumpHeight = 2f;
-    public float jumpForce = 9f;
+
+    public float crouchHeight = 1f;
+    public float standingHeight = 1.5f;
+    public float crouchSpeedMultiplier = 0.5f;
 
     public Camera playerCamera;
     public float zoomSpeed = 10f;
@@ -16,8 +19,12 @@ public class SimpleCharacterController : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
+    private bool isRunning = false;
+    private bool isCrouching = false;
 
-    bool isRunning = false;
+    public LayerMask ceilingMask;
+    public float ceilingCheckRadius = 0.3f;
+    public float ceilingCheckDistance = 1.1f;
 
     void Start()
     {
@@ -31,16 +38,36 @@ public class SimpleCharacterController : MonoBehaviour
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
 
+        HandleCrouch();
         Move();
         Jump();
         ZoomCamera();
 
-        Vector3 vertical = Vector3.up * velocity.y;
-
-        // 중력만 velocity에 유지
+        // 중력 처리
         velocity.y += gravity * Time.deltaTime;
+        controller.Move(Vector3.up * velocity.y * Time.deltaTime);
+    }
 
-        controller.Move((vertical) * Time.deltaTime);
+    void HandleCrouch()
+    {
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            if (!isCrouching)
+            {
+                isCrouching = true;
+                controller.height = crouchHeight;
+                controller.center = new Vector3(0, 0.2f, 0);
+            }
+        }
+        else
+        {
+            if (isCrouching && !IsCeilingBlocked())
+            {
+                isCrouching = false;
+                controller.height = standingHeight;
+                controller.center = new Vector3(0, 0, 0);
+            }
+        }
     }
 
     void Move()
@@ -51,7 +78,7 @@ public class SimpleCharacterController : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
         if (move.magnitude > 1f)
-            move = move.normalized;
+            move.Normalize();
 
         if (isGrounded)
             isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -60,7 +87,7 @@ public class SimpleCharacterController : MonoBehaviour
 
         Vector3 horizontal = move * currentSpeed;
 
-        controller.Move((horizontal) * Time.deltaTime);
+        controller.Move(horizontal * Time.deltaTime);
     }
 
     void Jump()
@@ -70,6 +97,14 @@ public class SimpleCharacterController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
+
+    bool IsCeilingBlocked()
+    {
+        Vector3 start = transform.position + Vector3.up * (controller.height / 2f);
+        Vector3 end = transform.position + Vector3.up * standingHeight;
+        return Physics.CheckCapsule(start, end, ceilingCheckRadius, ceilingMask);
+    }
+
     void ZoomCamera()
     {
         if (playerCamera == null) return;
@@ -81,5 +116,4 @@ public class SimpleCharacterController : MonoBehaviour
             playerCamera.fieldOfView = Mathf.Clamp(playerCamera.fieldOfView, minFOV, maxFOV);
         }
     }
-
 }
