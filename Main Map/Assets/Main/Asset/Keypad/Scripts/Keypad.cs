@@ -38,6 +38,12 @@ namespace NavKeypad
         [SerializeField] private TMP_Text keypadDisplayText;
         [SerializeField] private AudioSource audioSource;
 
+        [SerializeField] private AudioClip doorMovingSfx;  // 문 올라가는 중 반복 재생할 소리
+        [SerializeField] private AudioClip doorOpenedSfx;  // 문 완전히 올라갔을 때 재생할 소리
+        [SerializeField] private AudioClip chestOpenSfx;
+
+        private AudioSource doorAudioSource;
+
 
         private string currentInput;
         private bool displayingResult = false;
@@ -49,6 +55,9 @@ namespace NavKeypad
         {
             ClearInput();
             panelMesh.material.SetVector("_EmissionColor", screenNormalColor * screenIntensity);
+            doorAudioSource = gameObject.AddComponent<AudioSource>();
+            doorAudioSource.loop = true;
+            doorAudioSource.playOnAwake = false;
         }
 
 
@@ -130,12 +139,45 @@ namespace NavKeypad
 
             if (LiftObject != null && LiftObject.CompareTag("LiftObject"))
             {
-                LiftObject.transform.position = new Vector3(0, 3.5f, 0);
+                StartCoroutine(MoveDoorUpRoutine(LiftObject.transform, 4f, 3f));
             }
             if (LiftObject != null && LiftObject.CompareTag("chest"))
             {
                 LiftObject.transform.rotation = Quaternion.Euler(0, -110f, 0);
+                audioSource.PlayOneShot(chestOpenSfx);
             }
+            if (LiftObject != null && LiftObject.CompareTag("Door"))
+            {
+                StartCoroutine(MoveDoorUpRoutine(LiftObject.transform, 4.5f, 3f));
+            }
+        }
+        private IEnumerator MoveDoorUpRoutine(Transform target, float distance, float duration)
+        {
+            doorAudioSource.clip = doorMovingSfx;
+            doorAudioSource.loop = true;
+            doorAudioSource.Play();
+
+            Vector3 startPos = target.position;
+            Vector3 endPos = startPos + new Vector3(0, distance, 0);
+
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                target.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            target.position = endPos;
+
+            // 문 올라가는 소리 멈추고,
+            doorAudioSource.Stop();
+
+            // 문 완전히 올라갔을 때 재생할 소리 재생 (한번만)
+            doorAudioSource.loop = false;
+            doorAudioSource.clip = doorOpenedSfx;
+            doorAudioSource.Play();
         }
 
     }

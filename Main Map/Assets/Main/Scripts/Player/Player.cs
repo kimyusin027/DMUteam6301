@@ -26,14 +26,60 @@ public class SimpleCharacterController : MonoBehaviour
     public float ceilingCheckRadius = 0.3f;
     public float ceilingCheckDistance = 1.1f;
 
+    public AudioClip footstepSound;
+    private AudioSource audioSource;
+
+    public AudioClip landingSfx;            // 착지 소리용 사운드 클립
+    private AudioSource landingAudioSource; // 착지 소리 재생용 오디오 소스
+    private bool wasGrounded;
+    private bool hasJumped = false; // 점프했는지 상태 저장
+    private float airTime = 0f;
+    public float airTimeThreshold = 1f; // 2초 이상 공중에 있으면 착지음 재생
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = footstepSound;
+        audioSource.loop = false;  // 한 번만 재생
+        audioSource.playOnAwake = false;
+
+        // 착지 소리용 오디오 소스 생성
+        landingAudioSource = gameObject.AddComponent<AudioSource>();
+        landingAudioSource.loop = false;
+        landingAudioSource.playOnAwake = false;
     }
 
     void Update()
     {
         isGrounded = controller.isGrounded;
+
+        if (isGrounded)
+        {
+            // 착지 조건: 
+            // 1) 점프 후 착지
+            // 2) 2초 이상 공중에 있다가 착지
+            if ((hasJumped || airTime >= airTimeThreshold) && !wasGrounded)
+            {
+                landingAudioSource.PlayOneShot(landingSfx);
+                hasJumped = false;
+                airTime = 0f;
+            }
+        }
+        else
+        {
+            // 공중에 떠있으면 시간 누적
+            airTime += Time.deltaTime;
+        }
+
+        wasGrounded = isGrounded;
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            hasJumped = true;
+            airTime = 0f; // 점프할 땐 공중시간 초기화
+        }
 
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
@@ -88,6 +134,22 @@ public class SimpleCharacterController : MonoBehaviour
         Vector3 horizontal = move * currentSpeed;
 
         controller.Move(horizontal * Time.deltaTime);
+
+        // 소리 재생 또는 정지 처리
+        if (isGrounded && move.magnitude > 0.1f)
+        {
+            audioSource.pitch = isRunning ? 1.2f : 1.0f;
+
+            if (!audioSource.isPlaying)
+                audioSource.Play();
+        }
+        else
+        {
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop(); // 움직임 멈추면 즉시 소리 중단
+            }
+        }
     }
 
     void Jump()

@@ -10,10 +10,21 @@ public class Interact : MonoBehaviour
     private Camera Cam;
     private CharacterController controller;
 
+    [SerializeField] private AudioClip paperPickupSfx;
+    [SerializeField] private AudioSource audioSource;
+
     void Start()
     {
         Cam = Camera.main;
         controller = GetComponent<CharacterController>();
+    }
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     void Update()
@@ -36,27 +47,22 @@ public class Interact : MonoBehaviour
     void Interaction(GameObject target)
     {
         Debug.Log("상호작용 대상: " + target.name);
-        if (target.name == "Keypad")
-        {
-            Vector3 forward = target.transform.forward;
-            Vector3 left = -target.transform.right;
 
-            Vector3 destination = target.transform.position + forward * 2f + left * 2f;
-
-            controller.enabled = false;
-            transform.position = destination;
-            controller.enabled = true;
-
-            Debug.Log("이동 성공!");
-        }
-        else if (target.name == "eggpaper")
+        if (target.name == "eggpaper")
         {
             Debug.Log("회고록: " + target.name);
+            audioSource.PlayOneShot(paperPickupSfx);
             target.SetActive(false);
         }
         else if (target.name == "sideroompaper")
         {
             Debug.Log("탈출 전 종이: " + target.name);
+            target.SetActive(false);
+        }
+        else if (target.name == "Paper")
+        {
+            Debug.Log("탈출 전 종이: " + target.name);
+            audioSource.PlayOneShot(paperPickupSfx);
             target.SetActive(false);
         }
     }

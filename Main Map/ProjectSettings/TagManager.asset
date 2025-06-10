@@ -11,6 +11,7 @@ TagManager:
   - Interactable
   - LiftObject
   - chest
+  - End
   layers:
   - Default
   - TransparentFX
