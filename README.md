@@ -54,7 +54,8 @@ A 기업은 그 칩셋(##)으로 시장 점유율을 100% 가까이 찍으며 �
 🔗 [PPT 보기](#) (업로드 예정)
 
 ### 📺 프로젝트 발표 자료  
-🔗 졸작 발표 최종 (1).pptx
+🔗  [프로젝트 발표 자료 다운로드](https://github.com/DMUteam6301/DMUteam6301/blob/e82df0da960d054bf279c9ee4f0fb836e26fa51e/%EC%A1%B8%EC%9E%91%20%EB%B0%9C%ED%91%9C%20%EC%B5%9C%EC%A2%85%20(1).pptx?raw=true)
+
 
 ### 📽 프로젝트 시연 영상  
 🔗 https://www.youtube.com/watch?v=zEheBudhFyY
