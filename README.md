@@ -2,7 +2,7 @@
 
 ## 📙 개요
 <p align="center">
-  <img src="#" width="400" height="400"/>
+  <img src="메인화면.png" width="400" height="400"/>
 </p>
 
 **『  』는 세상의 인간들을 지배하려는 AI 에 맞서 싸우는 깨어있는 자, '마키나'의 이야기입니다.**
